@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SGrade.Data;
 using SGrade.Data.Repositories;
 using SGrade.Models;
+using SGrade.Models.DTOs;
 
 namespace SGrade.Controllers
 {
@@ -16,11 +18,13 @@ namespace SGrade.Controllers
     public class UniversitiesController : ControllerBase
     {
         private readonly IUniversityRepo _repo;
+        private readonly IMapper _mapper;
 
-        public UniversitiesController(IUniversityRepo repo)
+        public UniversitiesController(IUniversityRepo repo, IMapper mapper)
         {
             _repo = repo;
-            
+            _mapper = mapper;
+
         }
 
         // GET: api/Universities
@@ -28,7 +32,8 @@ namespace SGrade.Controllers
         public async Task<ActionResult<IEnumerable<University>>> GetUniversities()
         {
             var res = await _repo.GetAll();
-            return res.ToList();
+            var resDTOS = _mapper.Map<IEnumerable<IGradable>, IEnumerable<LightGradableDTO>>(res);
+            return Ok(resDTOS.ToList());
         }
 
         // GET: api/Universities/5
@@ -59,7 +64,7 @@ namespace SGrade.Controllers
 
             try
             {
-                _repo.Commit();
+                await _repo.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -82,7 +87,7 @@ namespace SGrade.Controllers
         public async Task<ActionResult<University>> PostUniversity(University university)
         {
             _repo.Add(university);
-            _repo.Commit();
+            await _repo.Commit();
 
             return CreatedAtAction("GetUniversity", new { id = university.Id }, university);
         }
@@ -98,7 +103,7 @@ namespace SGrade.Controllers
             }
 
             _repo.Delete(university);
-            _repo.Commit();
+            await _repo.Commit();
 
             return NoContent();
         }

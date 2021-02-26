@@ -49,7 +49,7 @@ namespace SGrade.Controllers
         public async Task<ActionResult<Review>> PostReview(Review review)
         {
             _repo.Add(review);
-            _repo.Commit();
+            await _repo.Commit();
 
             return CreatedAtAction("PostReview", new { id = review.Id }, review);
         }
@@ -68,7 +68,7 @@ namespace SGrade.Controllers
 
             try
             {
-                _repo.Commit();
+                await _repo.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -96,7 +96,7 @@ namespace SGrade.Controllers
             }
 
             _repo.Delete(entity);
-            _repo.Commit();
+            await _repo.Commit();
 
             return NoContent();
         }

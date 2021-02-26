@@ -6,9 +6,6 @@ namespace SGrade.Models
     {
         public Major Major { get; set; }
         public int MajorId { get; set; }
-        [DefaultValue("Teacher")]
-
-        public string Type { get; set; }
 
     }
 }

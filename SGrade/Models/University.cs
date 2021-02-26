@@ -9,8 +9,6 @@ namespace SGrade.Models
     public class University : IGradable
     {
         public ICollection<Major> Majors { get; set; }
-        [DefaultValue("University")]
-        public string Type { get; set; }
 
     }
 }

@@ -49,7 +49,7 @@ namespace SGrade.Controllers
         public async Task<ActionResult<Teacher>> PostTeacher(Teacher teacher)
         {
             _repo.Add(teacher);
-            _repo.Commit();
+            await _repo.Commit();
 
             return CreatedAtAction("PostTeacher", new { id = teacher.Id }, teacher);
         }
@@ -68,7 +68,7 @@ namespace SGrade.Controllers
 
             try
             {
-                _repo.Commit();
+                await _repo.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -96,7 +96,7 @@ namespace SGrade.Controllers
             }
 
             _repo.Delete(entity);
-            _repo.Commit();
+            await _repo.Commit();
 
             return NoContent();
         }

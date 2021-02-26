@@ -10,8 +10,6 @@ namespace SGrade.Models
         public ICollection<Subject> Subjects { get; set; }
         public ICollection<Teacher> Teachers { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
-        [DefaultValue("Major")]
-        public string Type { get; set; } 
 
     }
 }

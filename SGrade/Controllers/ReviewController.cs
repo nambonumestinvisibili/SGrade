@@ -11,68 +11,68 @@ namespace SGrade.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MajorsController : ControllerBase
+    public class ReviewController : ControllerBase
     {
-        private readonly IMajorRepo _repo;
+        private readonly IReviewRepo _repo;
 
-        public MajorsController(IMajorRepo repo)
+        public ReviewController(IReviewRepo repo)
         {
             _repo = repo;
         }
 
-        // GET: api/Majors
+        // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Major>>> GetMajors()
+        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
         {
             var res = await _repo.GetAll();
             return res.ToList();
         }
 
-        // GET: api/Majors/5
+        // GET: api/Reviews/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Major>> GetMajor(int id)
+        public async Task<ActionResult<Review>> GetReview(int id)
         {
-            var major = await _repo.GetSingle(id);
+            var entity = await _repo.GetSingle(id);
 
-            if (major == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return major;
+            return entity;
         }
 
 
-        // POST: api/Majors
+        // POST: api/Review
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Major>> PostMajor(Major major)
+        public async Task<ActionResult<Review>> PostReview(Review review)
         {
-            _repo.Add(major);
-            await _repo.Commit();
+            _repo.Add(review);
+            _repo.Commit();
 
-            return CreatedAtAction("PostMajor", new { id = major.Id }, major);
+            return CreatedAtAction("PostReview", new { id = review.Id }, review);
         }
 
-        // PUT: api/Majors/5
+        // PUT: api/Review/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMajor(int id, Major major)
+        public async Task<IActionResult> PutReview(int id, Review review)
         {
-            if (id != major.Id)
+            if (id != review.Id)
             {
                 return BadRequest();
             }
 
-            _repo.Update(major);
+            _repo.Update(review);
 
             try
             {
-                await _repo.Commit();
+                _repo.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MajorExists(id))
+                if (!EntityExists(id))
                 {
                     return NotFound();
                 }
@@ -85,27 +85,25 @@ namespace SGrade.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Majors/5
+        // DELETE: api/Review/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMajor(int id)
+        public async Task<IActionResult> DeleteReview(int id)
         {
-            var major = await _repo.GetSingle(id);
-            if (major == null)
+            var entity = await _repo.GetSingle(id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            _repo.Delete(major);
-            await _repo.Commit();
+            _repo.Delete(entity);
+            _repo.Commit();
 
             return NoContent();
         }
 
-        private bool MajorExists(int id)
+        private bool EntityExists(int id)
         {
             return _repo.GetSingle(id) != null;
         }
     }
-
 }
-

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using SGrade.Data;
 using SGrade.Data.Repositories;
 using SGrade.Models;
+using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 
 namespace SGrade
 {
@@ -42,10 +43,16 @@ namespace SGrade
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddRazorPages();
 
             services.AddScoped<IUniversityRepo, UniversityRepo>();
+            services.AddScoped<IMajorRepo, MajorRepo>();
+            services.AddScoped<ITeacherRepo, TeacherRepo>();
+            services.AddScoped<ISubjectRepo, SubjectRepo>();
+            services.AddScoped<IReviewRepo, ReviewRepo>();
+
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -86,15 +93,15 @@ namespace SGrade
                 endpoints.MapRazorPages();
             });
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "ClientApp";
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseReactDevelopmentServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }

@@ -11,68 +11,68 @@ namespace SGrade.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MajorsController : ControllerBase
+    public class TeachersController : ControllerBase
     {
-        private readonly IMajorRepo _repo;
+        private readonly ITeacherRepo _repo;
 
-        public MajorsController(IMajorRepo repo)
+        public TeachersController(ITeacherRepo repo)
         {
             _repo = repo;
         }
 
-        // GET: api/Majors
+        // GET: api/Teachers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Major>>> GetMajors()
+        public async Task<ActionResult<IEnumerable<Teacher>>> GetMajors()
         {
             var res = await _repo.GetAll();
             return res.ToList();
         }
 
-        // GET: api/Majors/5
+        // GET: api/Teachers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Major>> GetMajor(int id)
+        public async Task<ActionResult<Teacher>> GetTeachers(int id)
         {
-            var major = await _repo.GetSingle(id);
+            var entity = await _repo.GetSingle(id);
 
-            if (major == null)
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            return major;
+            return entity;
         }
 
 
-        // POST: api/Majors
+        // POST: api/Teacher
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Major>> PostMajor(Major major)
+        public async Task<ActionResult<Teacher>> PostTeacher(Teacher teacher)
         {
-            _repo.Add(major);
-            await _repo.Commit();
+            _repo.Add(teacher);
+            _repo.Commit();
 
-            return CreatedAtAction("PostMajor", new { id = major.Id }, major);
+            return CreatedAtAction("PostTeacher", new { id = teacher.Id }, teacher);
         }
 
-        // PUT: api/Majors/5
+        // PUT: api/Teacher/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMajor(int id, Major major)
+        public async Task<IActionResult> PutTeacher(int id, Teacher teacher)
         {
-            if (id != major.Id)
+            if (id != teacher.Id)
             {
                 return BadRequest();
             }
 
-            _repo.Update(major);
+            _repo.Update(teacher);
 
             try
             {
-                await _repo.Commit();
+                _repo.Commit();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MajorExists(id))
+                if (!EntityExists(id))
                 {
                     return NotFound();
                 }
@@ -85,27 +85,25 @@ namespace SGrade.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Majors/5
+        // DELETE: api/Teacher/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMajor(int id)
+        public async Task<IActionResult> DeleteTeacher(int id)
         {
-            var major = await _repo.GetSingle(id);
-            if (major == null)
+            var entity = await _repo.GetSingle(id);
+            if (entity == null)
             {
                 return NotFound();
             }
 
-            _repo.Delete(major);
-            await _repo.Commit();
+            _repo.Delete(entity);
+            _repo.Commit();
 
             return NoContent();
         }
 
-        private bool MajorExists(int id)
+        private bool EntityExists(int id)
         {
             return _repo.GetSingle(id) != null;
         }
     }
-
 }
-

@@ -19,9 +19,6 @@ namespace SGrade.Models
         [DefaultValue(0)]
         [Range(-10, 10)]
         public int Votes { get; set; }
-        //[ForeignKey("UserVote")]
-        //public ICollection<UserVote> UserVotes { get; set; }
-
     }
 }
 

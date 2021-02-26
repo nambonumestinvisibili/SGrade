@@ -88,9 +88,9 @@ namespace SGrade.Data
             }
         }
 
-        public virtual void Commit()
+        public async Task<int> Commit()
         {
-            _context.SaveChanges();
+            return await _context.SaveChangesAsync();
         }
 
         

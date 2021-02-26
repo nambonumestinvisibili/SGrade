@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace SGrade.Data.Repositories
 {
@@ -10,6 +12,16 @@ namespace SGrade.Data.Repositories
     {
         public UniversityRepo(SGradeContext sgcontext) : base(sgcontext)
         {
+
+        }
+
+        public async Task<University> GetPresentingUniversity(int id)
+        {
+            IQueryable<University> query = _context.Universities
+                .Include(x => x.Reviews)
+                .Include(x => x.Majors);
+
+            return await query.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 
@@ -17,6 +29,18 @@ namespace SGrade.Data.Repositories
     {
         public MajorRepo(SGradeContext sgcontext) : base(sgcontext)
         {
+        }
+
+        public async Task<Major> GetPresentingMajor(int id)
+        {
+            IQueryable<Major> query = _context.Majors
+                .Include(x => x.Reviews)
+                .Include(x => x.Subjects.Take(5))
+                .Include(x => x.Teachers.Take(5))
+                .Include(x => x.Subjects)
+                .Include(x => x.University);
+
+            return await query.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 

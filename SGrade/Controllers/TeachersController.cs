@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SGrade.Data.Repositories;
 using SGrade.Models;
+using SGrade.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,12 @@ namespace SGrade.Controllers
     public class TeachersController : ControllerBase
     {
         private readonly ITeacherRepo _repo;
+        private readonly IMapper _mapper;
 
-        public TeachersController(ITeacherRepo repo)
+        public TeachersController(ITeacherRepo repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         // GET: api/Teachers
@@ -25,7 +29,8 @@ namespace SGrade.Controllers
         public async Task<ActionResult<IEnumerable<Teacher>>> GetMajors()
         {
             var res = await _repo.GetAll();
-            return res.ToList();
+            var resDTOS = _mapper.Map<IEnumerable<IGradable>, IEnumerable<LightGradableDTO>>(res);
+            return Ok(resDTOS.ToList());
         }
 
         // GET: api/Teachers/5
@@ -39,7 +44,8 @@ namespace SGrade.Controllers
                 return NotFound();
             }
 
-            return entity;
+            return _mapper.Map<Teacher, TeacherDTO>(entity);
+
         }
 
 

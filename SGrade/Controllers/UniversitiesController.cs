@@ -40,14 +40,14 @@ namespace SGrade.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<University>> GetUniversity(int id)
         {
-            var university = await _repo.GetSingle(id);
+            var university = await _repo.GetPresentingUniversity(id);
 
             if (university == null)
             {
                 return NotFound();
             }
 
-            return university;
+            return _mapper.Map<University, UniversityDTO>(university);
         }
 
         // PUT: api/Universities/5

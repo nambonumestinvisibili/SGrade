@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SGrade.Data.Repositories;
 using SGrade.Models;
+using SGrade.Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,12 @@ namespace SGrade.Controllers
     public class MajorsController : ControllerBase
     {
         private readonly IMajorRepo _repo;
+        private readonly IMapper _mapper;
 
-        public MajorsController(IMajorRepo repo)
+        public MajorsController(IMajorRepo repo, IMapper mapper)
         {
             _repo = repo;
+            _mapper = mapper;
         }
 
         // GET: api/Majors
@@ -25,21 +29,22 @@ namespace SGrade.Controllers
         public async Task<ActionResult<IEnumerable<Major>>> GetMajors()
         {
             var res = await _repo.GetAll();
-            return res.ToList();
+            var resDTOS = _mapper.Map<IEnumerable<IGradable>, IEnumerable<LightGradableDTO>>(res);
+            return Ok(resDTOS.ToList());
         }
 
         // GET: api/Majors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Major>> GetMajor(int id)
+        public async Task<ActionResult<MajorDTO>> GetMajor(int id)
         {
-            var major = await _repo.GetSingle(id);
+            var major = await _repo.GetPresentingMajor(id);
 
             if (major == null)
             {
                 return NotFound();
             }
 
-            return major;
+            return _mapper.Map<Major, MajorDTO>(major);
         }
 
 

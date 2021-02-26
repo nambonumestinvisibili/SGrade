@@ -8,12 +8,14 @@ namespace SGrade.Data.Repositories
 {
     public interface IUniversityRepo : IGradableRepo<University>
     {
+        Task<University> GetPresentingUniversity(int id);
     }
 
     public interface IMajorRepo : IGradableRepo<Major>
     {
-
+        Task<Major> GetPresentingMajor(int id);
     }
+
     public interface ITeacherRepo : IGradableRepo<Teacher>
     {
 

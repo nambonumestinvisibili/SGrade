@@ -13,6 +13,11 @@ namespace SGrade.Services
         public AutoMapping()
         {
             CreateMap<IGradable, LightGradableDTO>();
+            CreateMap<Major, MajorDTO>();
+            CreateMap<University, UniversityDTO>();
+            CreateMap<Subject, SubjectDTO>();
+            CreateMap<Teacher, TeacherDTO>();
+
         }
     }
 }

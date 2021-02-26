@@ -11,7 +11,7 @@ namespace SGrade.Data
 {
     public class GradableRepo<T> : IGradableRepo<T> where T : IEntity
     {
-        private readonly SGradeContext _context;
+        protected readonly SGradeContext _context;
 
         public GradableRepo(SGradeContext sgcontext)
         {
